@@ -39,4 +39,4 @@ export const mockBookingSpot = delay();
 export const mockLogIn = delay();
 export const mockLogOut = delay();
 
-const DELAY_DURATION_MILLISECOND = 1250;
+const DELAY_DURATION_MILLISECOND = 1000;

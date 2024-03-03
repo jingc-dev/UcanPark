@@ -1,8 +1,13 @@
+import { format } from "date-fns";
 import { useEffect, useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { Calendar, DateData } from "react-native-calendars";
 import { MarkedDates } from "react-native-calendars/src/types";
-import { getMaxDateInFormat, getTodayInFormat } from "../lib/dates";
+import {
+  CALENDAR_LIBRARY_DATE_FORMAT,
+  NZ_DATE_FORMAT,
+  getMaxDateInFormat,
+} from "../lib/dates";
 import {
   AvailableParkingSpots,
   getMockedAvailableParkingSpots,
@@ -77,7 +82,7 @@ export default function BookSpotScreen({ navigation }) {
       <Text style={{ fontSize: 16 }}>Book Parking Spot</Text>
       <Calendar
         firstDay={1}
-        minDate={getTodayInFormat()}
+        minDate={format(new Date(), CALENDAR_LIBRARY_DATE_FORMAT)}
         maxDate={getMaxDateInFormat(new Date(), BOOKABLE_DURATION_IN_DAYS)}
         markedDates={markedDates}
         onDayPress={onDayPress}
@@ -95,15 +100,24 @@ export default function BookSpotScreen({ navigation }) {
               borderRadius: 8,
               padding: 16,
               gap: 10,
+              flexDirection: "row",
+              flexWrap: "wrap",
             }}
           >
             {selectedDate && (
-              <Text style={styles.info}>Selected: {selectedDate}</Text>
+              <View style={styles.infoGroup}>
+                <Text style={styles.info}>Selected</Text>
+                <Text style={styles.infoImportant}>
+                  {format(new Date(selectedDate), NZ_DATE_FORMAT)}
+                </Text>
+              </View>
             )}
             {spotsOfSelectedDay && (
-              <Text style={styles.info}>Spots left: {spotsOfSelectedDay}</Text>
+              <View style={styles.infoGroup}>
+                <Text style={styles.info}>Spots left</Text>
+                <Text style={styles.infoImportant}>{spotsOfSelectedDay}</Text>
+              </View>
             )}
-            <Text style={styles.info}>Duration: Full day</Text>
           </View>
         )}
       </View>
@@ -123,7 +137,15 @@ const BOOKABLE_DURATION_IN_DAYS = 10;
 const MOCK_INITIAL_COUPONS = 30;
 
 const styles = StyleSheet.create({
+  infoGroup: {
+    flex: 1,
+    gap: 5,
+  },
   info: {
     fontSize: 16,
+  },
+  infoImportant: {
+    fontSize: 20,
+    fontWeight: "bold",
   },
 });

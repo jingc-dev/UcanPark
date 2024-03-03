@@ -1,4 +1,4 @@
-import { getMaxDateInFormat, getTodayInFormat } from "../app/lib/dates";
+import { getMaxDateInFormat } from "../app/lib/dates";
 
 describe("date functions", () => {
   it("return a date in the future with given duration, in string format", () => {
