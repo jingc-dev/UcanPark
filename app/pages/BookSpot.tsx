@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Text, View } from "react-native";
 import { Calendar, DateData } from "react-native-calendars";
 import { MarkedDates } from "react-native-calendars/src/types";
+import { getMaxDateInFormat, getTodayInFormat } from "../lib/dates";
 
 export default function BookSpotScreen({ navigation }) {
   const [markedDates, setMarkedDates] = useState<MarkedDates>({});
@@ -28,11 +29,13 @@ export default function BookSpotScreen({ navigation }) {
       <Calendar
         firstDay={1}
         //TODO dynamic min & max dates
-        minDate="2024-03-02"
-        maxDate="2024-03-15"
+        minDate={getTodayInFormat()}
+        maxDate={getMaxDateInFormat(new Date(), BOOKABLE_DURATION_IN_DAYS)}
         markedDates={markedDates}
         onDayPress={onDayPress}
       />
     </View>
   );
 }
+
+const BOOKABLE_DURATION_IN_DAYS = 10;
