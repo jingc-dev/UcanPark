@@ -17,7 +17,10 @@ export const getMockedAvailableParkingSpots = (
   }
 
   return new Promise((resolve) => {
-    setTimeout(() => resolve(Object.fromEntries(data)), 1000);
+    setTimeout(
+      () => resolve(Object.fromEntries(data)),
+      DELAY_DURATION_MILLISECOND
+    );
   });
 };
 
@@ -26,3 +29,14 @@ export type AvailableParkingSpots = {
     spots: number;
   };
 };
+
+const delay = () => () =>
+  new Promise((resolve) => {
+    setTimeout(() => resolve(true), DELAY_DURATION_MILLISECOND);
+  });
+
+export const mockBookingSpot = delay();
+export const mockLogIn = delay();
+export const mockLogOut = delay();
+
+const DELAY_DURATION_MILLISECOND = 1250;

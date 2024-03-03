@@ -1,10 +1,27 @@
 import { Text, View } from "react-native";
 import StyledButton from "../ui/StyledButton";
+import { mockLogOut } from "../lib/mockApi";
+import { useEffect, useState } from "react";
 
 export default function MyBookings({ navigation }) {
-  const logOutHander = () => {
-    navigation.navigate("LogIn");
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
+
+  const onPressLogOut = () => {
+    logOut();
   };
+
+  const logOut = async () => {
+    setIsLoggingOut(true);
+    try {
+      await mockLogOut();
+      navigation.navigate("LogIn");
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setIsLoggingOut(false);
+    }
+  };
+
   return (
     <View
       style={{
@@ -18,7 +35,12 @@ export default function MyBookings({ navigation }) {
       }}
     >
       <Text style={{ fontSize: 16 }}>My Bookings</Text>
-      <StyledButton text="Log Out" onPress={logOutHander} />
+      <StyledButton
+        text="Log Out"
+        onPress={onPressLogOut}
+        loading={isLoggingOut}
+        loadingText="Logging Out"
+      />
     </View>
   );
 }

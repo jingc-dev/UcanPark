@@ -4,8 +4,10 @@ import StyledButton from "./StyledButton";
 
 export default function LoginForm({
   loginHandler,
+  loading,
 }: {
   loginHandler: () => void;
+  loading: boolean;
 }) {
   const [user, setUser] = useState("Demo User");
   const [pw, setPw] = useState("************");
@@ -14,7 +16,12 @@ export default function LoginForm({
     <View style={{ flex: 1, gap: 30 }}>
       <TextInput value={user} onChangeText={setUser} style={styles.input} />
       <TextInput value={pw} onChangeText={setPw} style={styles.input} />
-      <StyledButton text="Log In" onPress={loginHandler} />
+      <StyledButton
+        text="Log In"
+        onPress={loginHandler}
+        loadingText="Logging In"
+        loading={loading}
+      />
     </View>
   );
 }

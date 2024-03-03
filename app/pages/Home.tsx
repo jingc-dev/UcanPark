@@ -18,12 +18,12 @@ export default function Home() {
         }}
       >
         <Tab.Screen
-          name="Book a Spot"
+          name="BookSpot"
           component={BookSpotScreen}
           options={{ headerShown: false }}
         />
         <Tab.Screen
-          name="My Bookings"
+          name="MyBookings"
           component={MyBookings}
           options={{ headerShown: false }}
         />

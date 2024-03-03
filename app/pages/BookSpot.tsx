@@ -6,6 +6,7 @@ import { getMaxDateInFormat, getTodayInFormat } from "../lib/dates";
 import {
   AvailableParkingSpots,
   getMockedAvailableParkingSpots,
+  mockBookingSpot,
 } from "../lib/mockApi";
 import StyledButton from "../ui/StyledButton";
 
@@ -14,7 +15,12 @@ export default function BookSpotScreen({ navigation }) {
   const [selectedDate, setSelectedDate] = useState<string>();
   const [parkingSpots, setParkingSpots] = useState<AvailableParkingSpots>();
 
+  const [coupons, setCoupons] = useState(MOCK_INITIAL_COUPONS);
+
+  const [bookingProcessing, setBookingProcessing] = useState(false);
+
   const spotsOfSelectedDay = parkingSpots?.[`${selectedDate}`]?.spots;
+  const showBookButton = selectedDate && coupons > 0;
 
   const onDayPress = (day: DateData) => {
     setSelectedDate(day.dateString);
@@ -25,16 +31,32 @@ export default function BookSpotScreen({ navigation }) {
     });
   };
 
+  const bookingHandler = () => {
+    setCoupons(coupons - 1);
+    confirmBooking();
+  };
+
   const fetchData = async () => {
     try {
       const data = await getMockedAvailableParkingSpots(
         new Date(),
         BOOKABLE_DURATION_IN_DAYS
       );
-      console.log(data);
       setParkingSpots(data);
     } catch (err) {
       console.error(err);
+    }
+  };
+
+  const confirmBooking = async () => {
+    setBookingProcessing(true);
+    try {
+      await mockBookingSpot();
+      navigation.navigate("MyBookings");
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setBookingProcessing(false);
     }
   };
 
@@ -63,7 +85,7 @@ export default function BookSpotScreen({ navigation }) {
         //TODO nice to have: a dot below the date if the user has booked a spot on that day
       />
       <View>
-        <Text style={{ textAlign: "right" }}>Your coupons: 30</Text>
+        <Text style={{ textAlign: "right" }}>Your coupons: {coupons}</Text>
       </View>
       <View style={{ paddingVertical: 10 }}>
         {selectedDate && (
@@ -86,14 +108,19 @@ export default function BookSpotScreen({ navigation }) {
         )}
       </View>
 
-      <View>
-        {selectedDate && <StyledButton onPress={() => {}} text="Book Now" />}
-      </View>
+      {showBookButton && (
+        <StyledButton
+          onPress={bookingHandler}
+          text={"Book Now"}
+          loading={bookingProcessing}
+        />
+      )}
     </View>
   );
 }
 
 const BOOKABLE_DURATION_IN_DAYS = 10;
+const MOCK_INITIAL_COUPONS = 30;
 
 const styles = StyleSheet.create({
   info: {
