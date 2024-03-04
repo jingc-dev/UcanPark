@@ -14,6 +14,7 @@ import {
   mockBookingSpot,
 } from "../lib/mockApi";
 import StyledButton from "../ui/StyledButton";
+import { ScreenName } from "../lib/nav";
 
 export default function BookSpotScreen({ navigation }) {
   const [markedDates, setMarkedDates] = useState<MarkedDates>({});
@@ -57,7 +58,7 @@ export default function BookSpotScreen({ navigation }) {
     setBookingProcessing(true);
     try {
       await mockBookingSpot();
-      navigation.navigate("MyBookings");
+      navigation.navigate(ScreenName.MY_BOOKINGS);
     } catch (err) {
       console.error(err);
     } finally {
@@ -79,7 +80,6 @@ export default function BookSpotScreen({ navigation }) {
         gap: 16,
       }}
     >
-      <Text style={{ fontSize: 16 }}>Book Parking Spot</Text>
       <Calendar
         firstDay={1}
         minDate={format(new Date(), CALENDAR_LIBRARY_DATE_FORMAT)}

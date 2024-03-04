@@ -1,10 +1,9 @@
-import { Text, View } from "react-native";
-import StyledButton from "../ui/StyledButton";
+import { useState } from "react";
 import { mockLogOut } from "../lib/mockApi";
-import { useEffect, useState } from "react";
 import { ScreenName } from "../lib/nav";
+import StyledTextButton from "./StyledTextButton";
 
-export default function MyBookings({ navigation }) {
+export default function LogOutButton({ navigation }) {
   const [isLoggingOut, setIsLoggingOut] = useState(false);
 
   const onPressLogOut = () => {
@@ -24,16 +23,11 @@ export default function MyBookings({ navigation }) {
   };
 
   return (
-    <View
-      style={{
-        flex: 1,
-        backgroundColor: "#EBF7F8",
-        paddingTop: 50,
-        paddingBottom: 50,
-        paddingHorizontal: 20,
-        gap: 10,
-        justifyContent: "space-between",
-      }}
-    ></View>
+    <StyledTextButton
+      onPress={onPressLogOut}
+      loading={isLoggingOut}
+      loadingText="Logging Out"
+      text="Log Out"
+    />
   );
 }
