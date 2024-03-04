@@ -40,7 +40,7 @@ export default function MyBookings() {
         justifyContent: "space-between",
       }}
     >
-      {state.bookings.length === 0 && <Text>You have no bookings yet.</Text>}
+      {state.bookings.length === 0 && <Text>You have 0 bookings.</Text>}
 
       <FlatList
         data={state.bookings}

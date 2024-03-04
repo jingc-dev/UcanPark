@@ -23,14 +23,12 @@ export default function BookSpotScreen({ navigation }) {
   const [selectedDate, setSelectedDate] = useState<string>();
   const [parkingSpots, setParkingSpots] = useState<AvailableParkingSpots>();
 
-  const [coupons, setCoupons] = useState(MOCK_INITIAL_COUPONS);
+  const { state, dispatch } = useContext(BookingStateContext);
 
   const [bookingProcessing, setBookingProcessing] = useState(false);
 
-  const context = useContext(BookingStateContext);
-
   const spotsOfSelectedDay = parkingSpots?.[`${selectedDate}`]?.spots;
-  const showBookButton = selectedDate && coupons > 0;
+  const showBookButton = selectedDate && state.coupons > 0;
 
   const onDayPress = (day: DateData) => {
     setSelectedDate(day.dateString);
@@ -61,7 +59,7 @@ export default function BookSpotScreen({ navigation }) {
   const confirmBooking = async () => {
     setBookingProcessing(true);
     try {
-      context.dispatch({
+      dispatch({
         type: BookingAction.ADD_BOOKING,
         payload: {
           id: `demoUserId-${selectedDate}`,
@@ -69,7 +67,6 @@ export default function BookSpotScreen({ navigation }) {
         } as Booking,
       });
       await mockBookingSpot();
-      setCoupons(coupons - 1);
       navigation.navigate(ScreenName.MY_BOOKINGS);
     } catch (err) {
       console.error(err);
@@ -102,7 +99,9 @@ export default function BookSpotScreen({ navigation }) {
         //TODO nice to have: a dot below the date if the user has booked a spot on that day
       />
       <View>
-        <Text style={{ textAlign: "right" }}>Your coupons: {coupons}</Text>
+        <Text style={{ textAlign: "right" }}>
+          Your coupons: {state.coupons}
+        </Text>
       </View>
       <View style={{ paddingVertical: 10 }}>
         {selectedDate && (
@@ -146,7 +145,6 @@ export default function BookSpotScreen({ navigation }) {
 }
 
 const BOOKABLE_DURATION_IN_DAYS = 10;
-const MOCK_INITIAL_COUPONS = 30;
 
 const styles = StyleSheet.create({
   infoGroup: {
