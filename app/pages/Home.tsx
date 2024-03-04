@@ -3,12 +3,17 @@ import { ScreenName } from "../lib/nav";
 import LogOutButton from "../ui/LogOutButton";
 import BookSpotScreen from "./BookSpot";
 import MyBookings from "./MyBookings";
+import { bookingsReducer, initialBookingsState } from "../data/bookingsReducer";
+import { BookingStateContext } from "../data/context";
+import { useReducer } from "react";
 
 const Tab = createBottomTabNavigator();
 
 export default function Home({ navigation }) {
+  const [state, dispatch] = useReducer(bookingsReducer, initialBookingsState);
+
   return (
-    <>
+    <BookingStateContext.Provider value={{ state, dispatch }}>
       <Tab.Navigator
         screenOptions={{
           //TODO refactor colour uses
@@ -28,6 +33,6 @@ export default function Home({ navigation }) {
           }}
         />
       </Tab.Navigator>
-    </>
+    </BookingStateContext.Provider>
   );
 }

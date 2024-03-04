@@ -1,8 +1,10 @@
 import { format } from "date-fns";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { Calendar, DateData } from "react-native-calendars";
 import { MarkedDates } from "react-native-calendars/src/types";
+import { Booking, BookingAction } from "../data/bookingsReducer";
+import { BookingStateContext } from "../data/context";
 import {
   CALENDAR_LIBRARY_DATE_FORMAT,
   NZ_DATE_FORMAT,
@@ -13,8 +15,8 @@ import {
   getMockedAvailableParkingSpots,
   mockBookingSpot,
 } from "../lib/mockApi";
-import StyledButton from "../ui/StyledButton";
 import { ScreenName } from "../lib/nav";
+import StyledButton from "../ui/StyledButton";
 
 export default function BookSpotScreen({ navigation }) {
   const [markedDates, setMarkedDates] = useState<MarkedDates>({});
@@ -24,6 +26,8 @@ export default function BookSpotScreen({ navigation }) {
   const [coupons, setCoupons] = useState(MOCK_INITIAL_COUPONS);
 
   const [bookingProcessing, setBookingProcessing] = useState(false);
+
+  const context = useContext(BookingStateContext);
 
   const spotsOfSelectedDay = parkingSpots?.[`${selectedDate}`]?.spots;
   const showBookButton = selectedDate && coupons > 0;
@@ -38,7 +42,6 @@ export default function BookSpotScreen({ navigation }) {
   };
 
   const bookingHandler = () => {
-    setCoupons(coupons - 1);
     confirmBooking();
   };
 
@@ -54,10 +57,19 @@ export default function BookSpotScreen({ navigation }) {
     }
   };
 
+  //TODO: disallow multiple bookings on the same day
   const confirmBooking = async () => {
     setBookingProcessing(true);
     try {
+      context.dispatch({
+        type: BookingAction.ADD_BOOKING,
+        payload: {
+          id: `demoUserId-${selectedDate}`,
+          booking: { bookedDate: selectedDate },
+        } as Booking,
+      });
       await mockBookingSpot();
+      setCoupons(coupons - 1);
       navigation.navigate(ScreenName.MY_BOOKINGS);
     } catch (err) {
       console.error(err);
