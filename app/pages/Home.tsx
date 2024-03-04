@@ -1,10 +1,8 @@
-import { NavigationContainer } from "@react-navigation/native";
-import BookSpotScreen from "./BookSpot";
-import MyBookings from "./MyBookings";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { ScreenName } from "../lib/nav";
-import { Pressable, Text } from "react-native";
 import LogOutButton from "../ui/LogOutButton";
+import BookSpotScreen from "./BookSpot";
+import MyBookings from "./MyBookings";
 
 const Tab = createBottomTabNavigator();
 
@@ -13,6 +11,7 @@ export default function Home({ navigation }) {
     <>
       <Tab.Navigator
         screenOptions={{
+          //TODO refactor colour uses
           tabBarActiveTintColor: "#4C7A7D",
           tabBarInactiveTintColor: "gray",
           tabBarStyle: {
