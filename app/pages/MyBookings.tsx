@@ -1,11 +1,32 @@
 import { useContext, useState } from "react";
 import { FlatList, Pressable, Text, View } from "react-native";
-import StyledButton from "../ui/StyledButton";
-import StyledTextButton from "../ui/StyledTextButton";
+import { BookingAction } from "../data/bookingsReducer";
 import { BookingStateContext } from "../data/context";
+import { mockCancelBooking } from "../lib/mockApi";
+import StyledTextButton from "../ui/StyledTextButton";
 
-export default function MyBookings({ navigation }) {
+export default function MyBookings() {
   const { state, dispatch } = useContext(BookingStateContext);
+  const [isCancelling, setIsCancelling] = useState(false);
+  const [selectedItemId, setSelectedItemId] = useState("");
+
+  const onPressCancel = (id: string) => {
+    cancelBooking(id);
+  };
+
+  const cancelBooking = async (id: string) => {
+    setIsCancelling(true);
+    setSelectedItemId(id);
+    try {
+      await mockCancelBooking();
+      dispatch({ type: BookingAction.CANCEL_BOOKING, payload: { id: id } });
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setIsCancelling(false);
+      setSelectedItemId("");
+    }
+  };
 
   return (
     <View
@@ -23,7 +44,14 @@ export default function MyBookings({ navigation }) {
 
       <FlatList
         data={state.bookings}
-        renderItem={({ item }) => <Item title={item.booking.bookedDate} />}
+        renderItem={({ item }) => (
+          <Item
+            title={item.booking.bookedDate}
+            id={item.id}
+            loading={selectedItemId === item.id && isCancelling}
+            onPressCancel={onPressCancel}
+          />
+        )}
         keyExtractor={(item) => item.id}
         ItemSeparatorComponent={MySeparator}
       />
@@ -31,7 +59,17 @@ export default function MyBookings({ navigation }) {
   );
 }
 
-const Item = ({ title }: { title: string }) => {
+const Item = ({
+  id,
+  title,
+  loading = false,
+  onPressCancel,
+}: {
+  id: string;
+  title: string;
+  loading?: boolean;
+  onPressCancel: (id: string) => void;
+}) => {
   const [expand, setExpand] = useState(false);
   const onPress = () => {
     setExpand(!expand);
@@ -62,7 +100,9 @@ const Item = ({ title }: { title: string }) => {
         <StyledTextButton
           text="Cancel this Booking"
           type="warning"
-          onPress={() => null}
+          loadingText="Cancelling"
+          loading={loading}
+          onPress={() => onPressCancel(id)}
         />
       )}
     </Pressable>
