@@ -1,11 +1,14 @@
 import { useContext, useState } from "react";
 import { FlatList, Pressable, Text, View } from "react-native";
 import { BookingAction } from "../data/bookingsReducer";
-import { BookingStateContext } from "../data/context";
+import { BookingStateContext } from "../context/bookingContext";
 import { mockCancelBooking } from "../lib/mockApi";
 import StyledTextButton from "../ui/StyledTextButton";
+import { ThemeContext } from "../context/themeContext";
 
 export default function MyBookings() {
+  const theme = useContext(ThemeContext);
+
   const { state, dispatch } = useContext(BookingStateContext);
   const [isCancelling, setIsCancelling] = useState(false);
   const [selectedItemId, setSelectedItemId] = useState("");
@@ -32,7 +35,7 @@ export default function MyBookings() {
     <View
       style={{
         flex: 1,
-        backgroundColor: "#EBF7F8",
+        backgroundColor: theme.backgroundColor.primary,
         paddingTop: 50,
         paddingBottom: 50,
         paddingHorizontal: 20,
@@ -74,11 +77,13 @@ const Item = ({
   const onPress = () => {
     setExpand(!expand);
   };
+  const theme = useContext(ThemeContext);
+
   return (
     <Pressable
       style={{
         padding: 16,
-        backgroundColor: "#fff",
+        backgroundColor: theme.backgroundColor.secondary,
         borderRadius: 8,
         gap: 40,
       }}
@@ -92,7 +97,13 @@ const Item = ({
         }}
       >
         <Text style={{ fontSize: 16 }}>{title}</Text>
-        <Text style={{ color: "#4C7A7D", fontWeight: "bold", fontSize: 16 }}>
+        <Text
+          style={{
+            color: theme.brandColor.primary,
+            fontWeight: "bold",
+            fontSize: 16,
+          }}
+        >
           {expand ? "Done" : "Edit"}
         </Text>
       </View>

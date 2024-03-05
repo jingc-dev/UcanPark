@@ -4,7 +4,7 @@ import { StyleSheet, Text, View } from "react-native";
 import { Calendar, DateData } from "react-native-calendars";
 import { MarkedDates } from "react-native-calendars/src/types";
 import { Booking, BookingAction } from "../data/bookingsReducer";
-import { BookingStateContext } from "../data/context";
+import { BookingStateContext } from "../context/bookingContext";
 import {
   CALENDAR_LIBRARY_DATE_FORMAT,
   NZ_DATE_FORMAT,
@@ -18,9 +18,11 @@ import {
 import { ScreenName } from "../lib/nav";
 import StyledButton from "../ui/StyledButton";
 import InfoBox from "../ui/InfoBox";
+import { ThemeContext } from "../context/themeContext";
 
 export default function BookSpotScreen({ navigation }) {
   const { state, dispatch } = useContext(BookingStateContext);
+  const theme = useContext(ThemeContext);
 
   const [parkingSpots, setParkingSpots] = useState<AvailableParkingSpots>();
   const [bookingProcessing, setBookingProcessing] = useState(false);
@@ -37,7 +39,14 @@ export default function BookSpotScreen({ navigation }) {
   const onDayPress = (day: DateData) => {
     dispatch({
       type: BookingAction.SELECT_DATE,
-      payload: { id: day.dateString },
+      payload: {
+        id: day.dateString,
+        color: {
+          selected: theme.brandColor.primary,
+          booked: theme.vibrantRed,
+          bookedWithBackground: theme.textWhite,
+        },
+      },
     });
 
     //TODO Fix slight flicker before styling takes effect in tapped date
@@ -86,7 +95,7 @@ export default function BookSpotScreen({ navigation }) {
     <View
       style={{
         flex: 1,
-        backgroundColor: "#EBF7F8",
+        backgroundColor: theme.backgroundColor.primary,
         paddingTop: 50,
         paddingHorizontal: 20,
         gap: 16,

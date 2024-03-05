@@ -17,7 +17,14 @@ export type BookingActionType =
     }
   | {
       type: BookingAction.SELECT_DATE;
-      payload: { id: string };
+      payload: {
+        id: string;
+        color: {
+          selected: string;
+          booked: string;
+          bookedWithBackground: string;
+        };
+      };
     };
 
 export type Booking = { id: string; booking: { bookedDate: string } };
@@ -86,12 +93,16 @@ export const bookingsReducer = (
       const selectedDate = action.payload.id;
       const bookedIds = new Set(state.bookings.map((b) => b.id));
 
+      const { color } = action.payload;
+
       const selectedDateMark = {
         [selectedDate]: {
           marked: bookedIds.has(selectedDate),
-          dotColor: bookedIds.has(selectedDate) ? "#fff" : "red",
+          dotColor: bookedIds.has(selectedDate)
+            ? color.bookedWithBackground
+            : color.booked,
           selected: true,
-          selectedColor: "#4C7A7D",
+          selectedColor: color.selected,
         },
       };
 

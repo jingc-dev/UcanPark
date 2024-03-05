@@ -1,4 +1,4 @@
-import { BookingActionType, BookingState } from "./bookingsReducer";
+import { BookingActionType, BookingState } from "../data/bookingsReducer";
 
 import { createContext } from "react";
 

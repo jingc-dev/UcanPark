@@ -4,23 +4,24 @@ import LogOutButton from "../ui/LogOutButton";
 import BookSpotScreen from "./BookSpot";
 import MyBookings from "./MyBookings";
 import { bookingsReducer, initialBookingsState } from "../data/bookingsReducer";
-import { BookingStateContext } from "../data/context";
-import { useReducer } from "react";
+import { BookingStateContext } from "../context/bookingContext";
+import { useContext, useReducer } from "react";
+import { ThemeContext } from "../context/themeContext";
 
 const Tab = createBottomTabNavigator();
 
 export default function Home({ navigation }) {
+  const theme = useContext(ThemeContext);
   const [state, dispatch] = useReducer(bookingsReducer, initialBookingsState);
 
   return (
     <BookingStateContext.Provider value={{ state, dispatch }}>
       <Tab.Navigator
         screenOptions={{
-          //TODO refactor colour uses
-          tabBarActiveTintColor: "#4C7A7D",
-          tabBarInactiveTintColor: "gray",
+          tabBarActiveTintColor: theme.brandColor.primary,
+          tabBarInactiveTintColor: theme.textGray,
           tabBarStyle: {
-            backgroundColor: "#fff",
+            backgroundColor: theme.backgroundColor.secondary,
           },
         }}
       >

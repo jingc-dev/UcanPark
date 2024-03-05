@@ -1,4 +1,6 @@
+import { useContext } from "react";
 import { ActivityIndicator, Pressable, Text } from "react-native";
+import { ThemeContext } from "../context/themeContext";
 
 export default function StyledTextButton({
   text = "Click Me",
@@ -13,7 +15,14 @@ export default function StyledTextButton({
   type?: "normal" | "warning";
   onPress: () => void;
 }) {
-  const color = loading ? "gray" : type === "normal" ? "#4C7A7D" : "#C6171F";
+  const theme = useContext(ThemeContext);
+
+  const color = loading
+    ? theme.textGray
+    : type === "normal"
+    ? theme.brandColor.primary
+    : theme.brandColor.accent;
+
   return (
     <Pressable
       onPress={onPress}

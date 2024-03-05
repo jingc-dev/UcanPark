@@ -1,10 +1,14 @@
+import { useContext } from "react";
 import { View } from "react-native";
+import { ThemeContext } from "../context/themeContext";
 
 export default function InfoBox({ children }: { children: React.ReactNode }) {
+  const theme = useContext(ThemeContext);
+
   return (
     <View
       style={{
-        backgroundColor: "#fff",
+        backgroundColor: theme.backgroundColor.secondary,
         borderRadius: 8,
         padding: 16,
         gap: 10,

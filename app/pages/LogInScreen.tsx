@@ -1,10 +1,12 @@
 import { View } from "react-native";
 import LoginForm from "../ui/LogInForm";
 import Logo from "../ui/Logo";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { mockLogIn } from "../lib/mockApi";
+import { ThemeContext } from "../context/themeContext";
 
 export default function LogInScreen({ navigation }) {
+  const theme = useContext(ThemeContext);
   const [isLoggingIn, setIsLoggingIn] = useState(false);
   const onPressLogIn = () => {
     logIn();
@@ -26,7 +28,7 @@ export default function LogInScreen({ navigation }) {
     <View
       style={{
         flex: 1,
-        backgroundColor: "#EBF7F8",
+        backgroundColor: theme.backgroundColor.primary,
       }}
     >
       <View
