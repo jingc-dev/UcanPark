@@ -48,6 +48,7 @@ export type BookingState = {
   selectedDate: string | null;
   coupons: number;
   availableSpots: AvailableParkingSpots | null;
+  availableSpotsOfSelectedDate: number | null;
 };
 
 const MOCK_INITIAL_COUPONS = 2;
@@ -59,6 +60,7 @@ export const initialBookingsState: BookingState = {
   selectedDate: null,
   coupons: MOCK_INITIAL_COUPONS,
   availableSpots: null,
+  availableSpotsOfSelectedDate: null,
 };
 
 export const bookingsReducer = (
@@ -75,12 +77,13 @@ export const bookingsReducer = (
 
     case BookingAction.ADD_BOOKING: {
       const bookings = [...state.bookings, action.payload];
+      const dateToBook = action.payload.id;
       const bookedDates = bookings.map((b) => b.booking.bookedDate);
       const dottedDates = createCalendarDotMarkedDatesFromDates(bookedDates);
       const availableSpots: AvailableParkingSpots = {
         ...state.availableSpots,
-        [state.selectedDate]: {
-          spots: state.availableSpots[state.selectedDate].spots - 1,
+        [dateToBook]: {
+          spots: state.availableSpots[dateToBook].spots - 1,
         },
       };
 
@@ -96,15 +99,16 @@ export const bookingsReducer = (
     }
 
     case BookingAction.CANCEL_BOOKING: {
+      const dateToCancel = action.payload.id;
       const filteredBookings = state.bookings.filter(
-        (b) => b.id !== action.payload.id
+        (b) => b.id !== dateToCancel
       );
       const bookedDates = filteredBookings.map((d) => d.booking.bookedDate);
       const dottedDates = createCalendarDotMarkedDatesFromDates(bookedDates);
       const availableSpots: AvailableParkingSpots = {
         ...state.availableSpots,
-        [state.selectedDate]: {
-          spots: state.availableSpots[state.selectedDate].spots + 1,
+        [dateToCancel]: {
+          spots: state.availableSpots[dateToCancel].spots + 1,
         },
       };
 
@@ -136,10 +140,14 @@ export const bookingsReducer = (
         },
       };
 
+      const availableSpotsOfSelectedDate =
+        state.availableSpots[selectedDate].spots;
+
       return {
         ...state,
         markedDates: { ...state.bookedDates, ...selectedDateMark },
         selectedDate,
+        availableSpotsOfSelectedDate,
       };
     }
 

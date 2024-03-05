@@ -33,9 +33,13 @@ export default function BookSpotScreen({ navigation }) {
   const showBookingAction = state.selectedDate && !selectedDateAlreadyBooked;
   const showCouponWarning = state.selectedDate && state.coupons === 0;
 
-  const spotsOfSelectedDay =
-    state.availableSpots?.[`${state.selectedDate}`]?.spots;
-  const showBookButton = showBookingAction && state.coupons > 0;
+  const { availableSpotsOfSelectedDate } = state;
+
+  const showBookButton =
+    showBookingAction &&
+    state.coupons > 0 &&
+    typeof availableSpotsOfSelectedDate === "number" &&
+    availableSpotsOfSelectedDate > 0;
 
   const onDayPress = (day: DateData) => {
     dispatch({
@@ -128,7 +132,9 @@ export default function BookSpotScreen({ navigation }) {
 
           <View style={styles.infoGroup}>
             <Text style={styles.info}>Spots left</Text>
-            <Text style={styles.infoImportant}>{spotsOfSelectedDay}</Text>
+            <Text style={styles.infoImportant}>
+              {availableSpotsOfSelectedDate}
+            </Text>
           </View>
         </InfoBox>
       )}
