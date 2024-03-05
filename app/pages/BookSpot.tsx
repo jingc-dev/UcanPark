@@ -19,24 +19,21 @@ import { ScreenName } from "../lib/nav";
 import StyledButton from "../ui/StyledButton";
 
 export default function BookSpotScreen({ navigation }) {
-  const [markedDates, setMarkedDates] = useState<MarkedDates>({});
-  const [selectedDate, setSelectedDate] = useState<string>();
-  const [parkingSpots, setParkingSpots] = useState<AvailableParkingSpots>();
-
   const { state, dispatch } = useContext(BookingStateContext);
 
+  const [parkingSpots, setParkingSpots] = useState<AvailableParkingSpots>();
   const [bookingProcessing, setBookingProcessing] = useState(false);
 
-  const spotsOfSelectedDay = parkingSpots?.[`${selectedDate}`]?.spots;
-  const showBookButton = selectedDate && state.coupons > 0;
+  const spotsOfSelectedDay = parkingSpots?.[`${state.selectedDate}`]?.spots;
+  const showBookButton = state.selectedDate && state.coupons > 0;
 
   const onDayPress = (day: DateData) => {
-    setSelectedDate(day.dateString);
+    dispatch({
+      type: BookingAction.SELECT_DATE,
+      payload: { id: day.dateString },
+    });
 
     //TODO Fix slight flicker before styling takes effect in tapped date
-    setMarkedDates({
-      [day.dateString]: { selected: true, selectedColor: "#4C7A7D" },
-    });
   };
 
   const bookingHandler = () => {
@@ -59,14 +56,14 @@ export default function BookSpotScreen({ navigation }) {
   const confirmBooking = async () => {
     setBookingProcessing(true);
     try {
+      await mockBookingSpot();
       dispatch({
         type: BookingAction.ADD_BOOKING,
         payload: {
-          id: `demoUserId-${selectedDate}`,
-          booking: { bookedDate: selectedDate },
+          id: state.selectedDate,
+          booking: { bookedDate: state.selectedDate },
         } as Booking,
       });
-      await mockBookingSpot();
       navigation.navigate(ScreenName.MY_BOOKINGS);
     } catch (err) {
       console.error(err);
@@ -93,18 +90,19 @@ export default function BookSpotScreen({ navigation }) {
         firstDay={1}
         minDate={format(new Date(), CALENDAR_LIBRARY_DATE_FORMAT)}
         maxDate={getMaxDateInFormat(new Date(), BOOKABLE_DURATION_IN_DAYS)}
-        markedDates={markedDates}
+        markedDates={state.markedDates}
         onDayPress={onDayPress}
         style={{ borderRadius: 8 }}
-        //TODO nice to have: a dot below the date if the user has booked a spot on that day
       />
+
       <View>
         <Text style={{ textAlign: "right" }}>
           Your coupons: {state.coupons}
         </Text>
       </View>
+
       <View style={{ paddingVertical: 10 }}>
-        {selectedDate && (
+        {state.selectedDate && (
           <View
             style={{
               backgroundColor: "#fff",
@@ -115,11 +113,11 @@ export default function BookSpotScreen({ navigation }) {
               flexWrap: "wrap",
             }}
           >
-            {selectedDate && (
+            {state.selectedDate && (
               <View style={styles.infoGroup}>
                 <Text style={styles.info}>Selected</Text>
                 <Text style={styles.infoImportant}>
-                  {format(new Date(selectedDate), NZ_DATE_FORMAT)}
+                  {format(new Date(state.selectedDate), NZ_DATE_FORMAT)}
                 </Text>
               </View>
             )}
