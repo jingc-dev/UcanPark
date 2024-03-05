@@ -13,7 +13,7 @@ export default function Logo() {
         paddingTop: 40,
         borderBottomLeftRadius: 8,
         borderBottomRightRadius: 8,
-        borderColor: theme.border,
+        borderColor: theme.border.tint,
         borderWidth: 1,
       }}
     >

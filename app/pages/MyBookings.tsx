@@ -94,6 +94,8 @@ const Item = ({
         backgroundColor: theme.backgroundColor.secondary,
         borderRadius: 8,
         gap: 40,
+        borderColor: theme.border.normal,
+        borderBottomWidth: 1,
       }}
       onPress={onPress}
     >

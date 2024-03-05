@@ -11,9 +11,12 @@ export default function InfoBox({ children }: { children: React.ReactNode }) {
         backgroundColor: theme.backgroundColor.secondary,
         borderRadius: 8,
         padding: 16,
-        gap: 10,
+        gap: 6,
         flexDirection: "row",
         flexWrap: "wrap",
+        alignItems: "center",
+        borderColor: theme.border.normal,
+        borderBottomWidth: 1,
       }}
     >
       {children}

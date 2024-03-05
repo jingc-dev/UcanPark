@@ -19,6 +19,7 @@ import { ScreenName } from "../lib/nav";
 import StyledButton from "../ui/StyledButton";
 import InfoBox from "../ui/InfoBox";
 import { ThemeContext } from "../context/themeContext";
+import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 
 export default function BookSpotScreen({ navigation }) {
   const { state, dispatch } = useContext(BookingStateContext);
@@ -142,6 +143,7 @@ export default function BookSpotScreen({ navigation }) {
 
       {selectedDateAlreadyBooked && (
         <InfoBox>
+          <MaterialCommunityIcons name="check" size={20} />
           <Text style={styles.info}>You have booked a spot on this date.</Text>
         </InfoBox>
       )}
@@ -156,6 +158,7 @@ export default function BookSpotScreen({ navigation }) {
 
       {showCouponWarning && (
         <InfoBox>
+          <MaterialCommunityIcons name="information-outline" size={20} />
           <Text style={styles.info}>You have run out of coupons. </Text>
         </InfoBox>
       )}

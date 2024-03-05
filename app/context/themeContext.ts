@@ -14,7 +14,10 @@ export const defaultTheme: ValueType = {
   textWhite: "#fff",
   textGray: "gray",
   vibrantRed: "red",
-  border: "#4C7A7D50",
+  border: {
+    normal: "#4C7A7D",
+    tint: "#4C7A7D50",
+  },
 };
 
 type ValueType = {
@@ -31,7 +34,10 @@ type ValueType = {
   textWhite: string;
   textGray: string;
   vibrantRed: string;
-  border: string;
+  border: {
+    normal: string;
+    tint: string;
+  };
 };
 
 export const ThemeContext = createContext<ValueType | null>(null);
