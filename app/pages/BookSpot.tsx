@@ -17,6 +17,7 @@ import {
 } from "../lib/mockApi";
 import { ScreenName } from "../lib/nav";
 import StyledButton from "../ui/StyledButton";
+import InfoBox from "../ui/InfoBox";
 
 export default function BookSpotScreen({ navigation }) {
   const { state, dispatch } = useContext(BookingStateContext);
@@ -24,8 +25,14 @@ export default function BookSpotScreen({ navigation }) {
   const [parkingSpots, setParkingSpots] = useState<AvailableParkingSpots>();
   const [bookingProcessing, setBookingProcessing] = useState(false);
 
+  const selectedDateAlreadyBooked = state.bookings
+    .map((b) => b.id)
+    .includes(state.selectedDate);
+
+  const showBookingAction = state.selectedDate && !selectedDateAlreadyBooked;
+
   const spotsOfSelectedDay = parkingSpots?.[`${state.selectedDate}`]?.spots;
-  const showBookButton = state.selectedDate && state.coupons > 0;
+  const showBookButton = showBookingAction && state.coupons > 0;
 
   const onDayPress = (day: DateData) => {
     dispatch({
@@ -52,7 +59,6 @@ export default function BookSpotScreen({ navigation }) {
     }
   };
 
-  //TODO: disallow multiple bookings on the same day
   const confirmBooking = async () => {
     setBookingProcessing(true);
     try {
@@ -101,35 +107,30 @@ export default function BookSpotScreen({ navigation }) {
         </Text>
       </View>
 
-      <View style={{ paddingVertical: 10 }}>
-        {state.selectedDate && (
-          <View
-            style={{
-              backgroundColor: "#fff",
-              borderRadius: 8,
-              padding: 16,
-              gap: 10,
-              flexDirection: "row",
-              flexWrap: "wrap",
-            }}
-          >
-            {state.selectedDate && (
-              <View style={styles.infoGroup}>
-                <Text style={styles.info}>Selected</Text>
-                <Text style={styles.infoImportant}>
-                  {format(new Date(state.selectedDate), NZ_DATE_FORMAT)}
-                </Text>
-              </View>
-            )}
-            {spotsOfSelectedDay && (
-              <View style={styles.infoGroup}>
-                <Text style={styles.info}>Spots left</Text>
-                <Text style={styles.infoImportant}>{spotsOfSelectedDay}</Text>
-              </View>
-            )}
-          </View>
-        )}
-      </View>
+      {state.selectedDate && (
+        <InfoBox>
+          {state.selectedDate && (
+            <View style={styles.infoGroup}>
+              <Text style={styles.info}>Selected</Text>
+              <Text style={styles.infoImportant}>
+                {format(new Date(state.selectedDate), NZ_DATE_FORMAT)}
+              </Text>
+            </View>
+          )}
+          {spotsOfSelectedDay && (
+            <View style={styles.infoGroup}>
+              <Text style={styles.info}>Spots left</Text>
+              <Text style={styles.infoImportant}>{spotsOfSelectedDay}</Text>
+            </View>
+          )}
+        </InfoBox>
+      )}
+
+      {selectedDateAlreadyBooked && (
+        <InfoBox>
+          <Text style={styles.info}>You have booked a spot on this date.</Text>
+        </InfoBox>
+      )}
 
       {showBookButton && (
         <StyledButton
