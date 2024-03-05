@@ -45,7 +45,7 @@ export type BookingState = {
    * Mixed UI state of booked and selected dates
    */
   markedDates: MarkedDates;
-  selectedDate: string;
+  selectedDate: string | null;
   coupons: number;
   availableSpots: AvailableParkingSpots | null;
 };
@@ -56,7 +56,7 @@ export const initialBookingsState: BookingState = {
   bookings: [],
   bookedDates: {},
   markedDates: {},
-  selectedDate: "",
+  selectedDate: null,
   coupons: MOCK_INITIAL_COUPONS,
   availableSpots: null,
 };
@@ -90,7 +90,7 @@ export const bookingsReducer = (
         bookings,
         bookedDates: dottedDates,
         markedDates: dottedDates,
-        selectedDate: "",
+        selectedDate: null,
         coupons: state.coupons - 1,
       };
     }
@@ -115,7 +115,7 @@ export const bookingsReducer = (
         bookedDates: dottedDates,
         markedDates: dottedDates,
         coupons: state.coupons + 1,
-        selectedDate: "",
+        selectedDate: null,
       };
     }
 

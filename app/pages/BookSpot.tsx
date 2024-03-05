@@ -117,22 +117,19 @@ export default function BookSpotScreen({ navigation }) {
         </Text>
       </View>
 
-      {state.selectedDate && (
+      {state.selectedDate !== null && (
         <InfoBox>
-          {state.selectedDate && (
-            <View style={styles.infoGroup}>
-              <Text style={styles.info}>Selected</Text>
-              <Text style={styles.infoImportant}>
-                {format(new Date(state.selectedDate), NZ_DATE_FORMAT)}
-              </Text>
-            </View>
-          )}
-          {spotsOfSelectedDay && (
-            <View style={styles.infoGroup}>
-              <Text style={styles.info}>Spots left</Text>
-              <Text style={styles.infoImportant}>{spotsOfSelectedDay}</Text>
-            </View>
-          )}
+          <View style={styles.infoGroup}>
+            <Text style={styles.info}>Selected</Text>
+            <Text style={styles.infoImportant}>
+              {format(new Date(state.selectedDate), NZ_DATE_FORMAT)}
+            </Text>
+          </View>
+
+          <View style={styles.infoGroup}>
+            <Text style={styles.info}>Spots left</Text>
+            <Text style={styles.infoImportant}>{spotsOfSelectedDay}</Text>
+          </View>
         </InfoBox>
       )}
 
