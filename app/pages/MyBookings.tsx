@@ -5,6 +5,8 @@ import { BookingStateContext } from "../context/bookingContext";
 import { mockCancelBooking } from "../lib/mockApi";
 import StyledTextButton from "../ui/StyledTextButton";
 import { ThemeContext } from "../context/themeContext";
+import { format } from "date-fns";
+import { NZ_DATE_FORMAT } from "../lib/dates";
 
 export default function MyBookings() {
   const theme = useContext(ThemeContext);
@@ -43,13 +45,19 @@ export default function MyBookings() {
         justifyContent: "space-between",
       }}
     >
-      {state.bookings.length === 0 && <Text>You have 0 bookings.</Text>}
+      {state.bookings.length === 0 && (
+        <Text
+          style={{ fontSize: 16, textAlign: "center", color: theme.textGray }}
+        >
+          No bookings found
+        </Text>
+      )}
 
       <FlatList
         data={state.bookings}
         renderItem={({ item }) => (
           <Item
-            title={item.booking.bookedDate}
+            title={format(item.booking.bookedDate, NZ_DATE_FORMAT)}
             id={item.id}
             loading={selectedItemId === item.id && isCancelling}
             onPressCancel={onPressCancel}
@@ -96,7 +104,16 @@ const Item = ({
           alignItems: "center",
         }}
       >
-        <Text style={{ fontSize: 16 }}>{title}</Text>
+        <View
+          style={{
+            gap: 6,
+          }}
+        >
+          <Text style={{ fontSize: 12, color: theme.textGray }}>
+            Full Day Parking on
+          </Text>
+          <Text style={{ fontSize: 20, fontWeight: "bold" }}>{title}</Text>
+        </View>
         <Text
           style={{
             color: theme.brandColor.primary,

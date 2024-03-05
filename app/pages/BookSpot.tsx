@@ -115,9 +115,10 @@ export default function BookSpotScreen({ navigation }) {
         style={{ borderRadius: 8 }}
       />
 
-      <View>
-        <Text style={{ textAlign: "right" }}>
-          Your coupons: {state.coupons}
+      <View style={{ flexDirection: "row", justifyContent: "flex-end" }}>
+        <Text style={{ fontSize: 16 }}>My Coupons: </Text>
+        <Text style={{ fontSize: 16, fontWeight: "bold" }}>
+          {state.coupons}
         </Text>
       </View>
 
