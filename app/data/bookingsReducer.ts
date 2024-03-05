@@ -50,7 +50,7 @@ export type BookingState = {
   availableSpots: AvailableParkingSpots | null;
 };
 
-const MOCK_INITIAL_COUPONS = 30;
+const MOCK_INITIAL_COUPONS = 2;
 
 export const initialBookingsState: BookingState = {
   bookings: [],

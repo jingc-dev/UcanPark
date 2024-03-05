@@ -31,6 +31,7 @@ export default function BookSpotScreen({ navigation }) {
     .includes(state.selectedDate);
 
   const showBookingAction = state.selectedDate && !selectedDateAlreadyBooked;
+  const showCouponWarning = state.selectedDate && state.coupons === 0;
 
   const spotsOfSelectedDay =
     state.availableSpots?.[`${state.selectedDate}`]?.spots;
@@ -147,6 +148,12 @@ export default function BookSpotScreen({ navigation }) {
           text={"Book Now"}
           loading={bookingProcessing}
         />
+      )}
+
+      {showCouponWarning && (
+        <InfoBox>
+          <Text style={styles.info}>You have run out of coupons. </Text>
+        </InfoBox>
       )}
     </View>
   );

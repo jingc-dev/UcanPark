@@ -12,7 +12,7 @@ export const getMockedAvailableParkingSpots = (
   const data = new Map();
   for (let i = 0; i <= durationInDays; i++) {
     const date = getMaxDateInFormat(startDay, i);
-    const spots = Math.floor(Math.random() * 100);
+    const spots = Math.floor(Math.random() * 10);
     data.set(date, { spots: spots });
   }
 
