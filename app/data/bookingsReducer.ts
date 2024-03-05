@@ -1,12 +1,18 @@
 import { MarkedDates } from "react-native-calendars/src/types";
+import { AvailableParkingSpots } from "../lib/mockApi";
 
 export enum BookingAction {
+  LOAD_AVAILABLE_SPOTS = "load-available-spots",
   ADD_BOOKING = "add-booking",
   CANCEL_BOOKING = "cancel-booking",
   SELECT_DATE = "select-date",
 }
 
 export type BookingActionType =
+  | {
+      type: BookingAction.LOAD_AVAILABLE_SPOTS;
+      payload: AvailableParkingSpots;
+    }
   | {
       type: BookingAction.ADD_BOOKING;
       payload: Booking;
@@ -41,6 +47,7 @@ export type BookingState = {
   markedDates: MarkedDates;
   selectedDate: string;
   coupons: number;
+  availableSpots: AvailableParkingSpots | null;
 };
 
 const MOCK_INITIAL_COUPONS = 30;
@@ -51,6 +58,7 @@ export const initialBookingsState: BookingState = {
   markedDates: {},
   selectedDate: "",
   coupons: MOCK_INITIAL_COUPONS,
+  availableSpots: null,
 };
 
 export const bookingsReducer = (
@@ -58,13 +66,27 @@ export const bookingsReducer = (
   action: BookingActionType
 ): BookingState => {
   switch (action.type) {
+    case BookingAction.LOAD_AVAILABLE_SPOTS: {
+      return {
+        ...state,
+        availableSpots: action.payload,
+      };
+    }
+
     case BookingAction.ADD_BOOKING: {
       const bookings = [...state.bookings, action.payload];
       const bookedDates = bookings.map((b) => b.booking.bookedDate);
       const dottedDates = createCalendarDotMarkedDatesFromDates(bookedDates);
+      const availableSpots: AvailableParkingSpots = {
+        ...state.availableSpots,
+        [state.selectedDate]: {
+          spots: state.availableSpots[state.selectedDate].spots - 1,
+        },
+      };
 
       return {
         ...state,
+        availableSpots,
         bookings,
         bookedDates: dottedDates,
         markedDates: dottedDates,
@@ -79,13 +101,21 @@ export const bookingsReducer = (
       );
       const bookedDates = filteredBookings.map((d) => d.booking.bookedDate);
       const dottedDates = createCalendarDotMarkedDatesFromDates(bookedDates);
+      const availableSpots: AvailableParkingSpots = {
+        ...state.availableSpots,
+        [state.selectedDate]: {
+          spots: state.availableSpots[state.selectedDate].spots + 1,
+        },
+      };
 
       return {
         ...state,
+        availableSpots,
         bookings: filteredBookings,
         bookedDates: dottedDates,
         markedDates: dottedDates,
         coupons: state.coupons + 1,
+        selectedDate: "",
       };
     }
 

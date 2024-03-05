@@ -24,7 +24,6 @@ export default function BookSpotScreen({ navigation }) {
   const { state, dispatch } = useContext(BookingStateContext);
   const theme = useContext(ThemeContext);
 
-  const [parkingSpots, setParkingSpots] = useState<AvailableParkingSpots>();
   const [bookingProcessing, setBookingProcessing] = useState(false);
 
   const selectedDateAlreadyBooked = state.bookings
@@ -33,7 +32,8 @@ export default function BookSpotScreen({ navigation }) {
 
   const showBookingAction = state.selectedDate && !selectedDateAlreadyBooked;
 
-  const spotsOfSelectedDay = parkingSpots?.[`${state.selectedDate}`]?.spots;
+  const spotsOfSelectedDay =
+    state.availableSpots?.[`${state.selectedDate}`]?.spots;
   const showBookButton = showBookingAction && state.coupons > 0;
 
   const onDayPress = (day: DateData) => {
@@ -62,7 +62,7 @@ export default function BookSpotScreen({ navigation }) {
         new Date(),
         BOOKABLE_DURATION_IN_DAYS
       );
-      setParkingSpots(data);
+      dispatch({ type: BookingAction.LOAD_AVAILABLE_SPOTS, payload: data });
     } catch (err) {
       console.error(err);
     }
