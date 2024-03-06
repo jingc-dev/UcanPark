@@ -51,7 +51,7 @@ export type BookingState = {
   availableSpotsOfSelectedDate: number | null;
 };
 
-const MOCK_INITIAL_COUPONS = 2;
+const MOCK_INITIAL_COUPONS = 7;
 
 export const initialBookingsState: BookingState = {
   bookings: [],
