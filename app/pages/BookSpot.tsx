@@ -54,8 +54,6 @@ export default function BookSpotScreen({ navigation }) {
         },
       },
     });
-
-    //TODO Fix slight flicker before styling takes effect in tapped date
   };
 
   const bookingHandler = () => {

@@ -4,6 +4,7 @@ import Home from "./app/pages/Home";
 import LogInScreen from "./app/pages/LogInScreen";
 import { ScreenName } from "./app/lib/nav";
 import { ThemeContext, defaultTheme } from "./app/context/themeContext";
+import { StatusBar } from "expo-status-bar";
 
 const Stack = createNativeStackNavigator();
 
@@ -23,7 +24,7 @@ export default function App() {
             options={{ headerShown: false }}
           />
         </Stack.Navigator>
-        {/* <StatusBar style="auto" /> */}
+        <StatusBar style="auto" />
       </NavigationContainer>
     </ThemeContext.Provider>
   );
