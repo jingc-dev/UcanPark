@@ -41,4 +41,4 @@ Front-end for booking flow and user interactions complete.
 
 A quick demo:
 
-![How it looks on an Android phone - GIF](./screenshots/demo.gif)
+<img src="./screenshots/demo.gif" width=375 alt="A quick demo of the app"/>
